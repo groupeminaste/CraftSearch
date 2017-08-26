@@ -1,0 +1,38 @@
+# Copyright (C) 2017 Nathan FALLET, Michaël NASS and Jean-Baptiste EJARQUE
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+# Configuration of CraftSearch
+# Plugin by ZabriCraft
+
+# Name of the server in the search engine
+# Nom du serveur dans le moteur de recherche
+name: 'My server'
+
+# Description of the server in the search engine
+# Description du serveur dans le moteur de recherche
+description: 'Put your description here'
+
+# Domain name of the server without the port (Keep empty if you don't know)
+# Nom de domaine de votre serveur sans le port (Lassez vide si vous ne savez pas)
+domain-name: ''
+
+# Custom server ip - Use only if CraftSearch Support asks you to
+# Ip de serveur custom - Utiliser seulement sur demande du Support CraftSearch
+custom-ip: ''
+
+# Enable the PremiumGuard service
+# Activer le service PremiumGuard
+enable-premiumguard: false
