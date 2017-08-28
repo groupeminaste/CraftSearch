@@ -8,3 +8,7 @@ CraftSearch is the worldwide first innovative Minecraft search engine that finds
 4. Set your Spigot version in the Build Path
 5. Compile the program and save the jar file
 6. Enjoy!
+
+## How to install
+1. Move the jar file in /plugins/ folder of your minecraft server
+2. Start your minecraft server
