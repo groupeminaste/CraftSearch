@@ -74,7 +74,6 @@ public class CraftSearch extends JavaPlugin {
 		if (description != null) {
 			this.description = description;
 		}
-		update();
 	}
 
 	public boolean isPremiumGuard() {

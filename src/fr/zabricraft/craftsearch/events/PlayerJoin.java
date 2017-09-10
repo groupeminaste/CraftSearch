@@ -31,7 +31,6 @@ public class PlayerJoin implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		CraftSearch.getInstance().initPlayer(e.getPlayer());
-		CraftSearch.getInstance().update();
 		if (e.getPlayer().hasPermission("craftsearch.update")) {
 			Updater.checkForUpdate(e.getPlayer());
 		}

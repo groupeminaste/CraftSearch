@@ -33,7 +33,7 @@ public class Updater {
 
 	public static void checkForUpdate(Player... receive) {
 		try {
-			String url = "https://www.craftsearch.eu/plugin/checkforupdate.php?version="
+			String url = "https://www.craftsearch.net/plugin/checkforupdate.php?version="
 					+ CraftSearch.getInstance().getDescription().getVersion();
 
 			URL obj = new URL(url);

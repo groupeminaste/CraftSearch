@@ -19,7 +19,6 @@
 
 package fr.zabricraft.craftsearch.events;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -31,12 +30,6 @@ public class PlayerQuit implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
 		CraftSearch.getInstance().uninitPlayer(CraftSearch.getInstance().getPlayer(e.getPlayer().getUniqueId()));
-		Bukkit.getScheduler().scheduleSyncDelayedTask(CraftSearch.getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				CraftSearch.getInstance().update();
-			}
-		}, 20);
 	}
 
 }
