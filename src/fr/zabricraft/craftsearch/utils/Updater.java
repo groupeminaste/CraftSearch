@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2017 Nathan FALLET, Michaël NASS and Jean-Baptiste EJARQUE
+ *  Copyright (C) 2018 Nathan FALLET, Michaël NASS and Jean-Baptiste EJARQUE
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,40 +32,76 @@ import fr.zabricraft.craftsearch.CraftSearch;
 public class Updater {
 
 	public static void checkForUpdate(Player... receive) {
-		try {
-			String url = "https://www.craftsearch.net/plugin/checkforupdate.php?version="
-					+ CraftSearch.getInstance().getDescription().getVersion();
+		if (CraftSearch.getInstance().isUpdater()) {
+			try {
+				String url = "https://www.craftsearch.net/plugin/checkforupdate.php?version="
+						+ CraftSearch.getInstance().getDescription().getVersion();
 
-			URL obj = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+				URL obj = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-			con.setRequestMethod("GET");
+				con.setRequestMethod("GET");
 
-			con.setRequestProperty("User-Agent", CraftSearch.getInstance().getDescription().getName() + "/"
-					+ CraftSearch.getInstance().getDescription().getVersion());
+				con.setRequestProperty("User-Agent", CraftSearch.getInstance().getDescription().getName() + "/"
+						+ CraftSearch.getInstance().getDescription().getVersion());
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
+				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				String inputLine;
+				StringBuffer response = new StringBuffer();
 
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-
-			String msg = response.toString();
-
-			if (!msg.isEmpty()) {
-				msg = ChatColor.translateAlternateColorCodes('&', msg);
-				if (receive.length != 0) {
-					for (Player p : receive) {
-						p.sendMessage(msg);
-					}
-				} else {
-					CraftSearch.getInstance().getLogger().warning(msg);
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
 				}
+				in.close();
+
+				String msg = response.toString();
+
+				if (!msg.isEmpty()) {
+					msg = ChatColor.translateAlternateColorCodes('&', msg);
+					if (receive.length != 0) {
+						for (Player p : receive) {
+							p.sendMessage(msg);
+						}
+					} else {
+						CraftSearch.getInstance().getLogger().warning(msg);
+					}
+				}
+			} catch (Exception e) {
 			}
-		} catch (Exception e) {
+			try {
+				String url = "https://www.craftsearch.net/plugin/checkforupdate_pg.php?version=1.0";
+
+				URL obj = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+				con.setRequestMethod("GET");
+
+				con.setRequestProperty("User-Agent", CraftSearch.getInstance().getDescription().getName() + "/"
+						+ CraftSearch.getInstance().getDescription().getVersion());
+
+				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
+				}
+				in.close();
+
+				String msg = response.toString();
+
+				if (!msg.isEmpty()) {
+					msg = ChatColor.translateAlternateColorCodes('&', msg);
+					if (receive.length != 0) {
+						for (Player p : receive) {
+							p.sendMessage(msg);
+						}
+					} else {
+						CraftSearch.getInstance().getLogger().warning(msg);
+					}
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 

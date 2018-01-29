@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2017 Nathan FALLET, Michaël NASS and Jean-Baptiste EJARQUE
+ *  Copyright (C) 2018 Nathan FALLET, Michaël NASS and Jean-Baptiste EJARQUE
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,9 +36,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-
 import fr.zabricraft.craftsearch.commands.CraftSearchCmd;
 import fr.zabricraft.craftsearch.events.PlayerJoin;
 import fr.zabricraft.craftsearch.events.PlayerLogin;
@@ -64,7 +61,11 @@ public class CraftSearch extends JavaPlugin {
 	private String custom_ip;
 	private boolean premiumGuard;
 	private boolean bungeecord;
+	private boolean updater;
 	private Socket socket;
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
+	private boolean connected;
 	private ArrayList<ZabriPlayer> players;
 
 	public void setData(String name, String description) {
@@ -80,6 +81,10 @@ public class CraftSearch extends JavaPlugin {
 		return premiumGuard;
 	}
 	
+	public boolean isUpdater() {
+		return updater;
+	}
+
 	public ZabriPlayer getPlayer(UUID uuid) {
 		for (ZabriPlayer current : players) {
 			if (current.getUUID().equals(uuid)) {
@@ -101,7 +106,8 @@ public class CraftSearch extends JavaPlugin {
 
 	public void onEnable() {
 		instance = this;
-		
+		connected = false;
+
 		getLogger().info("Copyright (C) 2017 Nathan FALLET, Michaël NASS and Jean-Baptiste EJARQUE\n\n"
 				+ "This program is free software; you can redistribute it and/or modify\n"
 				+ "it under the terms of the GNU General Public License as published by\n"
@@ -114,7 +120,7 @@ public class CraftSearch extends JavaPlugin {
 				+ "You should have received a copy of the GNU General Public License along\n"
 				+ "with this program; if not, write to the Free Software Foundation, Inc.,\n"
 				+ "51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.");
-		
+
 		saveDefaultConfig();
 		reloadConfig();
 
@@ -123,6 +129,7 @@ public class CraftSearch extends JavaPlugin {
 		domaine = getConfig().getString("domain-name");
 		custom_ip = getConfig().getString("custom-ip");
 		premiumGuard = (getConfig().contains("enable-premiumguard") && getConfig().getBoolean("enable-premiumguard"));
+		updater = (!getConfig().contains("enable-checkforupdate") || getConfig().getBoolean("enable-checkforupdate"));
 		bungeecord = false;
 		players = new ArrayList<ZabriPlayer>();
 
@@ -152,7 +159,7 @@ public class CraftSearch extends JavaPlugin {
 				update();
 				Updater.checkForUpdate();
 			}
-		}, 0, 1200);
+		}, 0, 5 * 60 * 20);
 
 		try {
 			Metrics metrics = new Metrics(this);
@@ -172,7 +179,7 @@ public class CraftSearch extends JavaPlugin {
 		return bungeecord;
 	}
 
-	public void update() {
+	private void update() {
 		try {
 			if (name == null || name.equalsIgnoreCase("My server") || description == null
 					|| description.equalsIgnoreCase("Put your description here")) {
@@ -180,15 +187,9 @@ public class CraftSearch extends JavaPlugin {
 						+ " You need to customize some settings in your CraftSearch configuration file.");
 				return;
 			}
-			if (socket != null && socket.isConnected()) {
-				socket.close();
-				socket = null;
-			}
-			socket = new Socket();
-			socket.connect(new InetSocketAddress(IP, PORT), 3000);
 			HashMap<String, String> data = new HashMap<String, String>();
 			boolean setup = true;
-			data.put("method", "updateServerData");
+			data.put("method", "CraftSearch:update()");
 			data.put("adding", "plugin:" + getDescription().getName() + ":" + getDescription().getVersion());
 			data.put("port", Bukkit.getPort() + "");
 			data.put("name", name);
@@ -218,21 +219,16 @@ public class CraftSearch extends JavaPlugin {
 			}
 			data.put("whitelist", Bukkit.hasWhitelist() ? "true" : "false");
 			data.put("setup", setup ? "true" : "false");
-			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-			out.writeObject(data);
-			out.flush();
-			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-			Object o = in.readObject();
-			HashMap<String, String> response = new HashMap<String, String>();
-			if (o instanceof HashMap) {
-				response = (HashMap<String, String>) o;
-			}
-			if (response.containsKey("success") && !response.get("success").equals("true")) {
-				if (response.get("success").equals("false:unreachable")) {
+			HashMap<String, String> response = query(data);
+			if (response.containsKey("success")) {
+				if (response.get("success").equals("true")) {
+					connected = true;
+				} else if (response.get("success").equals("false:unreachable")) {
 					getLogger().warning(
-							"WARNING! Your server is unreachable from CraftSearch. Please check the server port is open.");
+							"ERROR! Your server is unreachable from CraftSearch. Please check the server port is open.");
 				}
 			}
+
 		} catch (Exception e) {
 		}
 	}
@@ -249,15 +245,95 @@ public class CraftSearch extends JavaPlugin {
 	}
 
 	public Socket getSocket() {
+		try {
+			if (socket != null && (socket.isClosed() || !socket.isConnected())) {
+				connected = false;
+				if (in != null) {
+					in.close();
+				}
+				in = null;
+				if (out != null) {
+					out.close();
+				}
+				out = null;
+				socket.close();
+				socket = null;
+			}
+			if (socket == null) {
+				socket = new Socket();
+				socket.connect(new InetSocketAddress(IP, PORT), 3000);
+			}
+		} catch (Exception e) {
+		}
 		return socket;
 	}
 
+	public ObjectInputStream getInputStream() {
+		try {
+			if (in == null) {
+				in = new ObjectInputStream(getSocket().getInputStream());
+			}
+		} catch (Exception e) {
+		}
+		return in;
+	}
+
+	public ObjectOutputStream getOutputStream() {
+		try {
+			if (out == null) {
+				out = new ObjectOutputStream(getSocket().getOutputStream());
+			}
+		} catch (Exception e) {
+		}
+		return out;
+	}
+
+	public HashMap<String, String> query(HashMap<String, String> data) {
+		HashMap<String, String> response = new HashMap<String, String>();
+		try {
+			HashMap<String, String> alive = new HashMap<String, String>();
+			alive.put("isAlive", "true");
+			getOutputStream().writeObject(alive);
+			getOutputStream().flush();
+			Object o = getInputStream().readObject();
+			if (o instanceof HashMap) {
+				alive = (HashMap<String, String>) o;
+				if (!alive.containsKey("alive") || !alive.get("alive").equals("true")) {
+					throw new NullPointerException();
+				}
+			}
+		} catch (Exception e) {
+			try {
+				connected = false;
+				in = null;
+				out = null;
+				socket = null;
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		if (!connected && !data.get("method").equals("CraftSearch:update()")) {
+			update();
+		}
+		if (connected || data.get("method").equals("CraftSearch:update()")) {
+			try {
+				getOutputStream().writeObject(data);
+				getOutputStream().flush();
+				Object o = getInputStream().readObject();
+				if (o instanceof HashMap) {
+					response = (HashMap<String, String>) o;
+				}
+			} catch (Exception e) {
+			}
+		} else {
+			response.put("success", "false:notconnected");
+		}
+		return response;
+	}
+
+	@Deprecated
 	public void connectSwitcher(Player p, String id) {
-		ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		out.writeUTF("ConnectById");
-		out.writeUTF(id);
-		p.sendPluginMessage(this, "BungeeCord", out.toByteArray());
-		p.sendMessage("§aYou will be connected to the server in a few seconds...");
+		getPlayer(p.getUniqueId()).connectSwitcher(id);
 	}
 
 }
