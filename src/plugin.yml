@@ -15,7 +15,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 name: CraftSearch
-version: 4.5_LTS
+version: 5.0_BETA1
 author: ZabriCraft
 website: https://www.craftsearch.net/
 main: fr.zabricraft.craftsearch.CraftSearch
@@ -23,6 +23,20 @@ commands:
     craftsearch:
         description: Return to the CraftSearch server
         aliases: [cs]
+    search:
+        description: Search a server on CraftSearch
+        aliases: [s]
+    ban:
+        description: Ban a player with CraftSearch sanction system
+        permission: craftsearch.ban
+    tempban:
+        description: Ban a player for a time with CraftSearch sanction system
+        permission: craftsearch.ban
+    pardon:
+        description: Pardon a player with CraftSearch sanction system
+        permission: craftsearch.ban
 permissions:
     craftsearch.update:
+        default: op
+    craftsearch.ban:
         default: op

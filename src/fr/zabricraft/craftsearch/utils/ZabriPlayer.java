@@ -19,6 +19,7 @@
 
 package fr.zabricraft.craftsearch.utils;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -41,11 +42,114 @@ public class ZabriPlayer {
 		return uuid;
 	}
 
+	public Lang getLang() {
+		Lang l = Lang.EN;
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("method", "ZabriPlayer:getLang()");
+		data.put("player", Bukkit.getPlayer(uuid).getName());
+		HashMap<String, String> response = CraftSearch.getInstance().query(data);
+		if (response.containsKey("success") && response.get("success").equals("true") && response.containsKey("lang")) {
+			l = Lang.get(response.get("lang"));
+		}
+		return l;
+	}
+
+	public void setLang(Lang lang) {
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("method", "ZabriPlayer:setLang()");
+		data.put("player", Bukkit.getPlayer(uuid).getName());
+		data.put("lang", lang.toString());
+		CraftSearch.getInstance().query(data);
+	}
+
+	public Grade getGrade() {
+		Grade g = Grade.PLAYER;
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("method", "ZabriPlayer:getGrade()");
+		data.put("player", Bukkit.getPlayer(uuid).getName());
+		HashMap<String, String> response = CraftSearch.getInstance().query(data);
+		if (response.containsKey("success") && response.get("success").equals("true")
+				&& response.containsKey("grade")) {
+			g = Grade.get(response.get("grade"));
+		}
+		return g;
+	}
+
+	public String getCurrentServer() {
+		String current_server = "";
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("method", "ZabriPlayer:getCurrentServer()");
+		data.put("player", Bukkit.getPlayer(uuid).getName());
+		HashMap<String, String> response = CraftSearch.getInstance().query(data);
+		if (response.containsKey("success") && response.get("success").equals("true")
+				&& response.containsKey("current_server")) {
+			current_server = response.get("current_server");
+		}
+		return current_server;
+	}
+
+	public boolean isBanned() {
+		boolean banned = false;
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("method", "ZabriPlayer:isBanned()");
+		data.put("player_name", Bukkit.getPlayer(uuid).getName());
+		data.put("player_uuid", uuid.toString());
+		HashMap<String, String> response = CraftSearch.getInstance().query(data);
+		if (response.containsKey("success") && response.get("success").equals("true")
+				&& response.containsKey("banned")) {
+			banned = response.get("banned").equals("true");
+		}
+		return banned;
+	}
+
+	public boolean addSanction(Sanction type, String reason, long expiration) {
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("method", "ZabriPlayer:addSanction()");
+		data.put("player_name", Bukkit.getPlayer(uuid).getName());
+		data.put("player_uuid", uuid.toString());
+		data.put("type", type.toString());
+		data.put("reason", reason);
+		data.put("expiration", expiration + "");
+		HashMap<String, String> response = CraftSearch.getInstance().query(data);
+		if (response.containsKey("success") && response.get("success").equals("true")) {
+			if (type.equals(Sanction.BAN)) {
+				Bukkit.getPlayer(uuid).kickPlayer("You were banned: " + reason);
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean removeSanction(Sanction type) {
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("method", "ZabriPlayer:removeSanction()");
+		data.put("player_name", Bukkit.getPlayer(uuid).getName());
+		data.put("player_uuid", uuid.toString());
+		data.put("type", type.toString());
+		HashMap<String, String> response = CraftSearch.getInstance().query(data);
+		return (response.containsKey("success") && response.get("success").equals("true"));
+	}
+
 	public void connectSwitcher(String serverid) {
-		ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		out.writeUTF("ConnectSwitcher");
-		out.writeUTF(serverid);
-		Bukkit.getPlayer(uuid).sendPluginMessage(CraftSearch.getInstance(), "BungeeCord", out.toByteArray());
+		Player p = Bukkit.getPlayer(uuid);
+		if (connectedFromCraftSearch()) {
+			ByteArrayDataOutput out = ByteStreams.newDataOutput();
+			out.writeUTF("ConnectSwitcher");
+			out.writeUTF(serverid);
+			p.sendMessage("§a" + Translater.get("chat_login_wait", getLang()));
+			p.sendPluginMessage(CraftSearch.getInstance(), "BungeeCord", out.toByteArray());
+		} else {
+			p.sendMessage("§c" + Translater.get("chat_error_fromcs_ctc", getLang()));
+		}
+	}
+
+	public boolean connectedFromCraftSearch() {
+		String current_server = getCurrentServer();
+		String serverID = CraftSearch.getInstance().getServerID();
+		if (current_server != null && !current_server.isEmpty() && serverID != null && !serverID.isEmpty()) {
+			return current_server.equals(serverID);
+		}
+		return false;
 	}
 
 }

@@ -33,6 +33,10 @@ domain-name: ''
 # Ip de serveur custom - Utiliser seulement sur demande du Support CraftSearch
 custom-ip: ''
 
+# UUID of server owner - Used to associate this server with a CraftSearch account and manage it in CraftSearch Manager
+# UUID du proprietaire -  Utilise pour associer ce serveur avec un compte CraftSearch et le gerer dans le manager
+owner: ''
+
 # Enable the PremiumGuard service
 # Activer le service PremiumGuard
 enable-premiumguard: false

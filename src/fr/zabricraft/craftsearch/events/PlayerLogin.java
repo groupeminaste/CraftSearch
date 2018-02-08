@@ -21,6 +21,7 @@ package fr.zabricraft.craftsearch.events;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,25 +34,39 @@ public class PlayerLogin implements Listener {
 
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent e) {
-		if(CraftSearch.getInstance().isPremiumGuard()){
+		if (CraftSearch.getInstance().isPremiumGuard()) {
 			try {
-				URL url = new URL("https://api.mojang.com/users/profiles/minecraft/"+e.getPlayer().getName());
+				URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + e.getPlayer().getName());
 				InputStream stream = url.openStream();
 				byte[] buf = new byte[8];
 				String msg = "";
-				while(stream.read(buf) >= 0){
-					for(byte bit : buf){
+				while (stream.read(buf) >= 0) {
+					for (byte bit : buf) {
 						msg += (char) bit;
 					}
 					buf = new byte[8];
 				}
 				msg = msg.trim();
-				if(msg.isEmpty() || !msg.equals("{\"id\":\""+e.getPlayer().getUniqueId().toString().replaceAll("-", "")+"\",\"name\":\""+e.getPlayer().getName()+"\"}")){
+				if (msg.isEmpty()
+						|| !msg.equals("{\"id\":\"" + e.getPlayer().getUniqueId().toString().replaceAll("-", "")
+								+ "\",\"name\":\"" + e.getPlayer().getName() + "\"}")) {
 					e.disallow(Result.KICK_OTHER, "Only premium players can join this server.");
 					return;
 				}
 			} catch (Exception e2) {
 				e.disallow(Result.KICK_OTHER, "Only premium players can join this server.");
+				return;
+			}
+		}
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("method", "ZabriPlayer:isBanned()");
+		data.put("player_name", e.getPlayer().getName());
+		data.put("player_uuid", e.getPlayer().getUniqueId().toString());
+		HashMap<String, String> response = CraftSearch.getInstance().query(data);
+		if (response.containsKey("success")) {
+			if (response.get("success").equals("true") && response.containsKey("banned")
+					&& response.get("banned").equals("true")) {
+				e.disallow(Result.KICK_BANNED, "I'm sorry but you were banned on a CraftSearch sanction list.");
 				return;
 			}
 		}
