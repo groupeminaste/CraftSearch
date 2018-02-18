@@ -25,6 +25,6 @@ If everything went well, you should have this :
 ## How to install
 1. Move the jar file in /plugins/ folder of your minecraft server.
 2. Start your minecraft server.
-3. To configure the plugin, please follow the instructions on our webpage : https://www.craftsearch.net/en/installation.
+3. To configure the plugin, please follow the instructions on our webpage : https://www.craftsearch.net/en/join.
 
 PLEASE NOTE : We will not be providing support to any modified plugin.
