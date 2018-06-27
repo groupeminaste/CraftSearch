@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2018 Nathan FALLET, Michaël NASS and Jean-Baptiste EJARQUE
+ *  Copyright (C) 2018 Groupe MINASTE
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@ package fr.zabricraft.craftsearch.utils;
 
 public enum Lang {
 
-	DEFAULT("Default"), EN("English"), FR("Français"), ES("Español"), IT("Italiano"), DE("Deutsch"), FI(
-			"Suomalainen"), SR("Српски - ћирилицом"), HR("Hrvatski"), RU("Русский");
+	DEFAULT("Default"), EN("English"), FR("Français"), ES("Español"), DE("Deutsch"), SR("Српски - ћирилицом (бета)"), HR(
+			"Hrvatski"), RU("Русский");
 
 	private String name;
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2018 Nathan FALLET, Michaël NASS and Jean-Baptiste EJARQUE
+ *  Copyright (C) 2018 Groupe MINASTE
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,6 +85,7 @@ public class CraftSearch extends JavaPlugin {
 		if (description != null) {
 			this.description = description;
 		}
+		update();
 	}
 
 	public boolean isPremiumGuard() {
@@ -172,112 +173,129 @@ public class CraftSearch extends JavaPlugin {
 
 		Translater.set("inventory_search_title",
 				new Translation(new TranslatedMsg(Lang.EN, "§r§rServers"), new TranslatedMsg(Lang.FR, "§r§rServeurs"),
-						new TranslatedMsg(Lang.ES, "§r§rServidores"), new TranslatedMsg(Lang.DE, "§r§rServers")));
+						new TranslatedMsg(Lang.ES, "§r§rServidores"), new TranslatedMsg(Lang.DE, "§r§rServers"),
+						new TranslatedMsg(Lang.SR, "§r§rСервери")));
 		Translater.set("inventory_slot_close",
 				new Translation(new TranslatedMsg(Lang.EN, "Close"), new TranslatedMsg(Lang.FR, "Fermer"),
-						new TranslatedMsg(Lang.ES, "Cerrar"), new TranslatedMsg(Lang.DE, "Schliessen")));
+						new TranslatedMsg(Lang.ES, "Cerrar"), new TranslatedMsg(Lang.DE, "Schliessen"),
+						new TranslatedMsg(Lang.SR, "Затвори")));
 		Translater.set("inventory_slot_previous",
 				new Translation(new TranslatedMsg(Lang.EN, "Previous page"),
 						new TranslatedMsg(Lang.FR, "Page précédente"), new TranslatedMsg(Lang.ES, "Página anterior"),
-						new TranslatedMsg(Lang.DE, "Vorherige Seite")));
+						new TranslatedMsg(Lang.DE, "Vorherige Seite"), new TranslatedMsg(Lang.SR, "Претходна Страна")));
 		Translater.set("inventory_slot_next",
 				new Translation(new TranslatedMsg(Lang.EN, "Next page"), new TranslatedMsg(Lang.FR, "Page suivante"),
-						new TranslatedMsg(Lang.ES, "Página siguiente"), new TranslatedMsg(Lang.DE, "Nächste Seite")));
+						new TranslatedMsg(Lang.ES, "Página siguiente"), new TranslatedMsg(Lang.DE, "Nächste Seite"),
+						new TranslatedMsg(Lang.SR, "Следећу Страну")));
 		Translater.set("inventory_slot_page_id",
 				new Translation(new TranslatedMsg(Lang.EN, "Page "), new TranslatedMsg(Lang.FR, "Page "),
-						new TranslatedMsg(Lang.ES, "Página "), new TranslatedMsg(Lang.DE, "Seite ")));
+						new TranslatedMsg(Lang.ES, "Página "), new TranslatedMsg(Lang.DE, "Seite "),
+						new TranslatedMsg(Lang.SR, "Страну ")));
 		Translater.set("inventory_search_slot_others",
 				new Translation(new TranslatedMsg(Lang.EN, "See others servers"),
 						new TranslatedMsg(Lang.FR, "Voir d'autres serveurs"),
 						new TranslatedMsg(Lang.ES, "Ver a otros servidores"),
-						new TranslatedMsg(Lang.DE, "Anderen Servers suchen")));
+						new TranslatedMsg(Lang.DE, "Anderen Servers suchen"),
+						new TranslatedMsg(Lang.SR, "Види други сервери")));
 		Translater.set("grade_player",
 				new Translation(new TranslatedMsg(Lang.EN, "Player"), new TranslatedMsg(Lang.FR, "Joueur"),
-						new TranslatedMsg(Lang.ES, "Jugador"), new TranslatedMsg(Lang.DE, "Spieler")));
+						new TranslatedMsg(Lang.ES, "Jugador"), new TranslatedMsg(Lang.DE, "Spieler"),
+						new TranslatedMsg(Lang.SR, "Играч")));
 		Translater.set("grade_partner",
 				new Translation(new TranslatedMsg(Lang.EN, "Partner"), new TranslatedMsg(Lang.FR, "Partenaire"),
-						new TranslatedMsg(Lang.ES, "Socio"), new TranslatedMsg(Lang.DE, "Partner")));
+						new TranslatedMsg(Lang.ES, "Socio"), new TranslatedMsg(Lang.DE, "Partner"),
+						new TranslatedMsg(Lang.SR, "Партнер")));
 		Translater.set("grade_admin",
 				new Translation(new TranslatedMsg(Lang.EN, "Admin"), new TranslatedMsg(Lang.FR, "Admin"),
-						new TranslatedMsg(Lang.ES, "Admin"), new TranslatedMsg(Lang.DE, "Admin")));
+						new TranslatedMsg(Lang.ES, "Admin"), new TranslatedMsg(Lang.DE, "Admin"),
+						new TranslatedMsg(Lang.SR, "Админ")));
 		Translater.set("grade_ads",
 				new Translation(new TranslatedMsg(Lang.EN, "Ads"), new TranslatedMsg(Lang.FR, "Publicitaire"),
-						new TranslatedMsg(Lang.ES, "Publicista"), new TranslatedMsg(Lang.DE, "Werbung")));
+						new TranslatedMsg(Lang.ES, "Publicista"), new TranslatedMsg(Lang.DE, "Werbung"),
+						new TranslatedMsg(Lang.SR, "Рекламе")));
 		Translater.set("grade_translater",
 				new Translation(new TranslatedMsg(Lang.EN, "Translater"), new TranslatedMsg(Lang.FR, "Traducteur"),
-						new TranslatedMsg(Lang.ES, "Traductor"), new TranslatedMsg(Lang.DE, "Übersetzer")));
+						new TranslatedMsg(Lang.ES, "Traductor"), new TranslatedMsg(Lang.DE, "Übersetzer"),
+						new TranslatedMsg(Lang.SR, "Преводилац")));
 		Translater.set("grade_builder",
 				new Translation(new TranslatedMsg(Lang.EN, "Builder"), new TranslatedMsg(Lang.FR, "Constructeur"),
-						new TranslatedMsg(Lang.ES, "Constructor"), new TranslatedMsg(Lang.DE, "Bauer")));
-		Translater.set("server_partner",
-				new Translation(new TranslatedMsg(Lang.EN, "Partner server"),
-						new TranslatedMsg(Lang.FR, "Serveur partenaire"),
-						new TranslatedMsg(Lang.ES, "Servidor asociado"), new TranslatedMsg(Lang.DE, "Partner Server")));
+						new TranslatedMsg(Lang.ES, "Constructor"), new TranslatedMsg(Lang.DE, "Bauer"),
+						new TranslatedMsg(Lang.SR, "")));
+		Translater.set("server_partner", new Translation(new TranslatedMsg(Lang.EN, "Partner server"),
+				new TranslatedMsg(Lang.FR, "Serveur partenaire"), new TranslatedMsg(Lang.ES, "Servidor asociado"),
+				new TranslatedMsg(Lang.DE, "Partner Server"), new TranslatedMsg(Lang.SR, "Партнер сервер")));
 		Translater.set("server_mc_premium",
 				new Translation(new TranslatedMsg(Lang.EN, "Minecraft Premium server"),
 						new TranslatedMsg(Lang.FR, "Serveur Minecraft Premium"),
 						new TranslatedMsg(Lang.ES, "Servidor Minecraft Premium"),
-						new TranslatedMsg(Lang.DE, "Minecraft Premium Server")));
+						new TranslatedMsg(Lang.DE, "Minecraft Premium Server"),
+						new TranslatedMsg(Lang.SR, "Маинкрафт Премиум сервер")));
 		Translater.set("server_mc_crack",
 				new Translation(new TranslatedMsg(Lang.EN, "Minecraft Cracked server"),
 						new TranslatedMsg(Lang.FR, "Serveur Minecraft Cracké"),
 						new TranslatedMsg(Lang.ES, "Servidor Minecraft Crack"),
-						new TranslatedMsg(Lang.DE, "Crack Minecraft Server")));
-		Translater.set("server_close",
-				new Translation(new TranslatedMsg(Lang.EN, "Closed server"),
-						new TranslatedMsg(Lang.FR, "Serveur fermé"), new TranslatedMsg(Lang.ES, "Servidor cerrado"),
-						new TranslatedMsg(Lang.DE, "Server aussgechaltet")));
-		Translater.set("server_whitelist",
-				new Translation(new TranslatedMsg(Lang.EN, "Whitelisted server"),
-						new TranslatedMsg(Lang.FR, "Serveur avec whitelist"),
-						new TranslatedMsg(Lang.ES, "Servidor con whitelist"),
-						new TranslatedMsg(Lang.DE, "Server mit Whitelist")));
+						new TranslatedMsg(Lang.DE, "Crack Minecraft Server"),
+						new TranslatedMsg(Lang.SR, "Маинкрафт Крак сервер")));
+		Translater.set("server_close", new Translation(new TranslatedMsg(Lang.EN, "Closed server"),
+				new TranslatedMsg(Lang.FR, "Serveur fermé"), new TranslatedMsg(Lang.ES, "Servidor cerrado"),
+				new TranslatedMsg(Lang.DE, "Server aussgechaltet"), new TranslatedMsg(Lang.SR, "Затворен сервер")));
+		Translater.set("server_whitelist", new Translation(new TranslatedMsg(Lang.EN, "Whitelisted server"),
+				new TranslatedMsg(Lang.FR, "Serveur avec whitelist"),
+				new TranslatedMsg(Lang.ES, "Servidor con whitelist"),
+				new TranslatedMsg(Lang.DE, "Server mit Whitelist"), new TranslatedMsg(Lang.SR, "Сервер са уајтлист")));
 		Translater.set("server_players",
 				new Translation(new TranslatedMsg(Lang.EN, "Players: %s"), new TranslatedMsg(Lang.FR, "Joueurs : %s"),
-						new TranslatedMsg(Lang.ES, "Jugadores: %s"), new TranslatedMsg(Lang.DE, "Spielern: %s")));
+						new TranslatedMsg(Lang.ES, "Jugadores: %s"), new TranslatedMsg(Lang.DE, "Spielern: %s"),
+						new TranslatedMsg(Lang.SR, "Играче: %s")));
 		Translater.set("server_version",
 				new Translation(new TranslatedMsg(Lang.EN, "Version : %s"), new TranslatedMsg(Lang.FR, "Version : %s"),
-						new TranslatedMsg(Lang.ES, "Versión: %s"), new TranslatedMsg(Lang.DE, "Version: %s")));
+						new TranslatedMsg(Lang.ES, "Versión: %s"), new TranslatedMsg(Lang.DE, "Version: %s"),
+						new TranslatedMsg(Lang.SR, "Верзија: %s")));
 		Translater.set("server_login",
 				new Translation(new TranslatedMsg(Lang.EN, "Left click to connect"),
 						new TranslatedMsg(Lang.FR, "Clic gauche pour se connecter"),
 						new TranslatedMsg(Lang.ES, "Clic izquierdo para conectarse"),
-						new TranslatedMsg(Lang.DE, "Links Klicken um zu verbinden")));
+						new TranslatedMsg(Lang.DE, "Links Klicken um zu verbinden"),
+						new TranslatedMsg(Lang.SR, "Леви клик да се повезати")));
 		Translater.set("server_bookmark",
 				new Translation(new TranslatedMsg(Lang.EN, "Right click to add to bookmarks"),
 						new TranslatedMsg(Lang.FR, "Clic droit pour ajouter aux favoris"),
 						new TranslatedMsg(Lang.ES, "Clic derecho para añadir a sus favoritos"),
-						new TranslatedMsg(Lang.DE, "Rechts Klicken um das Server als Favoriten zu speichern")));
+						new TranslatedMsg(Lang.DE, "Rechts Klicken um das Server als Favoriten zu speichern"),
+						new TranslatedMsg(Lang.SR, "Десни клик да се дода у фаворити")));
 		Translater.set("server_bookmark2",
 				new Translation(new TranslatedMsg(Lang.EN, "Right click to remove of bookmarks"),
 						new TranslatedMsg(Lang.FR, "Clic droit pour retirer des favoris"),
 						new TranslatedMsg(Lang.ES, "Clic derecho para quitar de sus favoritos"),
-						new TranslatedMsg(Lang.DE, "Rechts Klicken um das Server als Favoriten zu löschen")));
-		Translater.set("server_login_date",
-				new Translation(new TranslatedMsg(Lang.EN, "Login date: %s"),
-						new TranslatedMsg(Lang.FR, "Date de connexion : %s"),
-						new TranslatedMsg(Lang.ES, "Fetcha de conexión: %s"),
-						new TranslatedMsg(Lang.DE, "Verbindungsdatum: %s")));
+						new TranslatedMsg(Lang.DE, "Rechts Klicken um das Server als Favoriten zu löschen"),
+						new TranslatedMsg(Lang.SR, "Десни клик да се скида од фаворити")));
+		Translater.set("server_login_date", new Translation(new TranslatedMsg(Lang.EN, "Login date: %s"),
+				new TranslatedMsg(Lang.FR, "Date de connexion : %s"),
+				new TranslatedMsg(Lang.ES, "Fetcha de conexión: %s"),
+				new TranslatedMsg(Lang.DE, "Verbindungsdatum: %s"), new TranslatedMsg(Lang.SR, "Датум везе: %s")));
 		Translater.set("cmd_search_usage", new Translation(new TranslatedMsg(Lang.EN, "§c/%s <your search>"),
 				new TranslatedMsg(Lang.FR, "§c/%s <votre recherche>"),
-				new TranslatedMsg(Lang.ES, "§c/%s <su búsqueda>"), new TranslatedMsg(Lang.DE, "§c/%s <ihre Suche>")));
+				new TranslatedMsg(Lang.ES, "§c/%s <su búsqueda>"), new TranslatedMsg(Lang.DE, "§c/%s <ihre Suche>"),
+				new TranslatedMsg(Lang.SR, "§c/%s <ваш истраживан>")));
 		Translater.set("cmd_search_searching",
 				new Translation(new TranslatedMsg(Lang.EN, "§aSearching..."),
 						new TranslatedMsg(Lang.FR, "§aRecherche en cours..."),
 						new TranslatedMsg(Lang.ES, "§aBúsqueda en proceso..."),
-						new TranslatedMsg(Lang.DE, "§aDie Suche läuft...")));
+						new TranslatedMsg(Lang.DE, "§aDie Suche läuft..."),
+						new TranslatedMsg(Lang.SR, "§aистраживање је у току...")));
 		Translater.set("chat_login_wait",
 				new Translation(new TranslatedMsg(Lang.EN, "You will be connected to the server in a few seconds..."),
 						new TranslatedMsg(Lang.FR, "Vous allez être connecté au serveur dans quelques secondes..."),
 						new TranslatedMsg(Lang.ES, "Se conectará al servidor dentro de algunos segundos..."),
-						new TranslatedMsg(Lang.DE, "Sie werden in ein paar Sekunden verbunden...")));
+						new TranslatedMsg(Lang.DE, "Sie werden in ein paar Sekunden verbunden..."),
+						new TranslatedMsg(Lang.SR, "Бичете повезани на серверу за неку секунду...")));
 		Translater.set("chat_error_fromcs_ctc", new Translation(
 				new TranslatedMsg(Lang.EN, "You must be connected from CraftSearch to use Click-To-Connect!"),
 				new TranslatedMsg(Lang.FR,
 						"Vous devez être connecté depuis CraftSearch pour utiliser Click-To-Connect !"),
 				new TranslatedMsg(Lang.ES, "¡Es necesario conectarse con CraftSearch para utilisar Click-To-Connect!"),
-				new TranslatedMsg(Lang.DE,
-						"Sie müssen von CraftSearch verbunden sein um Click-To-Connect zu nützen!")));
+				new TranslatedMsg(Lang.DE, "Sie müssen von CraftSearch verbunden sein um Click-To-Connect zu nützen!"),
+				new TranslatedMsg(Lang.SR, "Морате да будете повезани од КрафтСерћ да би користили Клик-то-конект!")));
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			@Override
@@ -487,7 +505,7 @@ public class CraftSearch extends JavaPlugin {
 		}
 		return id;
 	}
-	
+
 	public File getFile() {
 		return super.getFile();
 	}

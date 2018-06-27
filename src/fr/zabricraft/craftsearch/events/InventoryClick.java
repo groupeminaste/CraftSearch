@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2018 Nathan FALLET, Michaël NASS and Jean-Baptiste EJARQUE
+ *  Copyright (C) 2018 Groupe MINASTE
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,13 +44,13 @@ public class InventoryClick implements Listener {
 					if (e.getSlot() == 29 && e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta()
 							&& e.getCurrentItem().getItemMeta().hasLore()) {
 						InventoryManager.openSearch(
-								e.getCurrentItem().getItemMeta().getLore().get(2).replaceFirst("§9Search : ", ""), p,
+								e.getCurrentItem().getItemMeta().getLore().get(1).replaceFirst("§9Search : ", ""), p,
 								Integer.parseInt(e.getCurrentItem().getItemMeta().getLore().get(0).replaceFirst(
 										"§a" + Translater.get("inventory_slot_page_id", zp.getLang()), "")) - 1);
 					} else if (e.getSlot() == 33 && e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta()
 							&& e.getCurrentItem().getItemMeta().hasLore()) {
 						InventoryManager.openSearch(
-								e.getCurrentItem().getItemMeta().getLore().get(2).replaceFirst("§9Search : ", ""), p,
+								e.getCurrentItem().getItemMeta().getLore().get(1).replaceFirst("§9Search : ", ""), p,
 								Integer.parseInt(e.getCurrentItem().getItemMeta().getLore().get(0).replaceFirst(
 										"§a" + Translater.get("inventory_slot_page_id", zp.getLang()), "")) - 1);
 					} else if (e.getSlot() == 31) {
