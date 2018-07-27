@@ -36,9 +36,9 @@ public class PardonCmd implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 1) {
 			Map<String, Object> data = new HashMap<String, Object>();
-			data.put("method", "ZabriPlayer:removeSanction()");
-			data.put("player_name", args[0]);
-			data.put("player_uuid", "");
+			data.put("method", "Plugin:removePlayerSanction()");
+			data.put("name", args[0]);
+			data.put("uuid", "");
 			data.put("type", Sanction.BAN.toString());
 			Map<String, Object> response = CraftSearch.getInstance().query(data);
 			if (response.containsKey("success") && response.get("success").equals("true")) {
