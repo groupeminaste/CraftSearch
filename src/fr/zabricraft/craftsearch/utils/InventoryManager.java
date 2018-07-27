@@ -20,7 +20,7 @@
 package fr.zabricraft.craftsearch.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -31,9 +31,9 @@ import org.bukkit.inventory.ItemStack;
 import fr.zabricraft.craftsearch.CraftSearch;
 
 public class InventoryManager {
-	
+
 	public static void openSearch(final String search, final Player player, final int pagination) {
-		HashMap<String, String> servers = CraftSearch.getInstance().searchServer(search, "relevance",
+		Map<String, Object> servers = CraftSearch.getInstance().searchServers(search, "relevance",
 				(pagination < 0 ? 0 : pagination) + 1);
 		ZabriPlayer zp = CraftSearch.getInstance().getPlayer(player.getUniqueId());
 		if (zp != null) {
@@ -45,16 +45,19 @@ public class InventoryManager {
 				page = 0;
 			}
 			int j = 0;
-			while (servers.containsKey("server" + (j+1) + "_id")) {
-				if (j < 27) {
-					ItemStack si = makeServItem(servers, (j+1), l, false);
-					if (si != null) {
-						i.addItem(si);
-					} else {
-						i.addItem(Items.setName(new ItemStack(Material.WOOL), "§cError with this server !"));
+			for (Object o : servers.values()) {
+				if (o instanceof Map) {
+					Map<String, Object> map = (Map<String, Object>) o;
+					if (j < 27) {
+						ItemStack si = makeServItem(map, l, false);
+						if (si != null) {
+							i.addItem(si);
+						} else {
+							i.addItem(Items.setName(new ItemStack(Material.WOOL), "§cError with this server !"));
+						}
 					}
+					j++;
 				}
-				j++;
 			}
 			i.setItem(31,
 					Items.setName(new ItemStack(Material.WOOL), "§a" + Translater.get("inventory_slot_close", l)));
@@ -75,25 +78,23 @@ public class InventoryManager {
 			player.sendMessage("§cError !");
 		}
 	}
-	
-	public static ItemStack makeServItem(HashMap<String, String> servers, int j, Lang lang, boolean bookmark,
-			String... cl) {
+
+	public static ItemStack makeServItem(Map<String, Object> server, Lang lang, boolean bookmark, String... cl) {
 		try {
 			int color = 15;
-			if (servers.get("server" + j + "_open").equals("true")) {
-				if (servers.get("server" + j + "_partner").equals("true")) {
+			if (((String) server.get("open")).equals("1")) {
+				if (((String) server.get("partner")).equals("1")) {
 					color = 11;
-				} else if (servers.get("server" + j + "_whitelist").equals("true")) {
+				} else if (((String) server.get("whitelist")).equals("1")) {
 					color = 4;
 				} else {
 					color = 5;
 				}
 			}
-			ItemStack result = Items.setName(Items.createItem(Material.WOOL, color),
-					"§6" + servers.get("server" + j + "_name"));
+			ItemStack result = Items.setName(Items.createItem(Material.WOOL, color), "§6" + server.get("name"));
 			ArrayList<String> lore = new ArrayList<String>();
 			String current = "";
-			for (char c : servers.get("server" + j + "_description").toCharArray()) {
+			for (char c : ((String) server.get("description")).toCharArray()) {
 				if ((current.length() > 40 && c == ' ') || c == '\n') {
 					lore.add("§a" + current);
 					current = "";
@@ -105,28 +106,28 @@ public class InventoryManager {
 				lore.add("§a" + current);
 			}
 			lore.add("");
-			if (servers.get("server" + j + "_open").equals("true")) {
-				if (servers.get("server" + j + "_partner").equals("true")) {
+			if (((String) server.get("open")).equals("1")) {
+				if (((String) server.get("partner")).equals("1")) {
 					lore.add("§7" + Translater.get("server_partner", lang));
-				} else if (servers.get("server" + j + "_online").equals("true")) {
+				} else if (((String) server.get("online")).equals("1")) {
 					lore.add("§7" + Translater.get("server_mc_premium", lang));
 				} else {
 					lore.add("§7" + Translater.get("server_mc_crack", lang));
 				}
-				if (servers.get("server" + j + "_whitelist").equals("true")) {
+				if (((String) server.get("whitelist")).equals("1")) {
 					lore.add("");
 					lore.add("§6" + Translater.get("server_whitelist", lang));
 				}
 				lore.add("");
-				lore.add("§b" + Translater.get("server_players", lang, servers.get("server" + j + "_players_online")
-						+ "/" + servers.get("server" + j + "_players_max")));
+				lore.add("§b" + Translater.get("server_players", lang,
+						server.get("players_online") + "/" + server.get("players_max")));
 			} else {
 				lore.add("§c" + Translater.get("server_close", lang));
 			}
 			lore.add("");
-			lore.add("§d" + Translater.get("server_version", lang, servers.get("server" + j + "_version")));
+			lore.add("§d" + Translater.get("server_version", lang, (String) server.get("version")));
 			lore.add("");
-			lore.add("§eIP: " + servers.get("server" + j + "_domaine"));
+			lore.add("§eIP: " + server.get("ip"));
 			for (String cls : cl) {
 				lore.add("");
 				lore.add("§c" + cls);
@@ -139,7 +140,7 @@ public class InventoryManager {
 				lore.add("§a" + Translater.get("server_bookmark", lang));
 			}
 			lore.add("");
-			lore.add("§9ID: " + servers.get("server" + j + "_id"));
+			lore.add("§9ID: " + server.get("id"));
 			result = Items.setLore(result, lore);
 			return result;
 		} catch (Exception e) {

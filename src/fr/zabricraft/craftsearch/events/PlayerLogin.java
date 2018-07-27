@@ -22,6 +22,7 @@ package fr.zabricraft.craftsearch.events;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -58,14 +59,14 @@ public class PlayerLogin implements Listener {
 				return;
 			}
 		}
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("method", "ZabriPlayer:isBanned()");
-		data.put("player_name", e.getPlayer().getName());
-		data.put("player_uuid", e.getPlayer().getUniqueId().toString());
-		HashMap<String, String> response = CraftSearch.getInstance().query(data);
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("method", "Plugin:isPlayerBanned()");
+		data.put("name", e.getPlayer().getName());
+		data.put("uuid", e.getPlayer().getUniqueId().toString());
+		Map<String, Object> response = CraftSearch.getInstance().query(data);
 		if (response.containsKey("success")) {
-			if (response.get("success").equals("true") && response.containsKey("banned")
-					&& response.get("banned").equals("true")) {
+			if ((boolean) response.get("success") && response.containsKey("banned")
+					&& (boolean) response.get("banned")) {
 				e.disallow(Result.KICK_BANNED, "I'm sorry but you were banned on a CraftSearch sanction list.");
 				return;
 			}

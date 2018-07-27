@@ -29,6 +29,7 @@ import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,16 +43,16 @@ public class Updater {
 
 	public static void checkForUpdate(Player... receive) {
 		if (CraftSearch.getInstance().isUpdater() && !updated) {
-			HashMap<String, String> data = new HashMap<String, String>();
-			data.put("method", "Updater:checkForUpdate()");
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("method", "Plugin:checkForUpdate()");
 			data.put("version", CraftSearch.getInstance().getDescription().getVersion());
-			HashMap<String, String> response = CraftSearch.getInstance().query(data);
-			if (response.containsKey("success") && response.get("success").equals("true")) {
-				CraftSearch.getInstance().getLogger().warning(response.get("message"));
+			Map<String, Object> response = CraftSearch.getInstance().query(data);
+			if (response.containsKey("success") && (boolean) response.get("success")) {
+				CraftSearch.getInstance().getLogger().warning((String) response.get("message"));
 				try {
 					CraftSearch.getInstance().getLogger().info(
-							"Trying to download CraftSearch " + response.get("latest") + " from CraftSearch Server...");
-					URL download = new URL(response.get("download"));
+							"Trying to download CraftSearch v" + response.get("latest") + " from CraftSearch Server...");
+					URL download = new URL((String) response.get("download"));
 					URLConnection c = download.openConnection();
 					c.setRequestProperty("User-Agent", CraftSearch.getInstance().getDescription().getName() + "/"
 							+ CraftSearch.getInstance().getDescription().getVersion());

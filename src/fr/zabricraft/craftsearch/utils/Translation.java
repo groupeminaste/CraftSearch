@@ -35,7 +35,7 @@ public class Translation {
 
 	public String getMessage(Lang lang) {
 		if (lang == null) {
-			return "§cUnknow language !";
+			return "§cUnknown language !";
 		}
 		if (lang.equals(Lang.DEFAULT)) {
 			lang = Lang.EN;
@@ -43,7 +43,7 @@ public class Translation {
 		if (messages.containsKey(lang)) {
 			return messages.get(lang);
 		}
-		return "§cMessage unavailable in " + lang.getName();
+		return messages.get(Lang.EN);
 	}
 
 }

@@ -20,6 +20,7 @@
 package fr.zabricraft.craftsearch.commands;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -34,12 +35,12 @@ public class PardonCmd implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 1) {
-			HashMap<String, String> data = new HashMap<String, String>();
+			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("method", "ZabriPlayer:removeSanction()");
 			data.put("player_name", args[0]);
 			data.put("player_uuid", "");
 			data.put("type", Sanction.BAN.toString());
-			HashMap<String, String> response = CraftSearch.getInstance().query(data);
+			Map<String, Object> response = CraftSearch.getInstance().query(data);
 			if (response.containsKey("success") && response.get("success").equals("true")) {
 				Bukkit.broadcastMessage("§e" + args[0] + " was pardoned by " + sender.getName() + ".");
 			} else {

@@ -22,7 +22,7 @@ package fr.zabricraft.craftsearch.utils;
 public enum Lang {
 
 	DEFAULT("Default"), EN("English"), FR("Français"), ES("Español"), DE("Deutsch"), SR("Српски - ћирилицом (бета)"), HR(
-			"Hrvatski"), RU("Русский");
+			"Hrvatski"), RU("Русский"), NL("Nederlands");
 
 	private String name;
 

@@ -20,6 +20,7 @@
 package fr.zabricraft.craftsearch.utils;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -44,74 +45,74 @@ public class ZabriPlayer {
 
 	public Lang getLang() {
 		Lang l = Lang.EN;
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("method", "ZabriPlayer:getLang()");
-		data.put("player", Bukkit.getPlayer(uuid).getName());
-		HashMap<String, String> response = CraftSearch.getInstance().query(data);
-		if (response.containsKey("success") && response.get("success").equals("true") && response.containsKey("lang")) {
-			l = Lang.get(response.get("lang"));
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("method", "Public:getPlayerDetails()");
+		data.put("name", Bukkit.getPlayer(uuid).getName());
+		Map<String, Object> response = CraftSearch.getInstance().query(data);
+		if (response.containsKey("success") && (boolean) response.get("success") && response.containsKey("lang")) {
+			l = Lang.get((String) response.get("lang"));
 		}
 		return l;
 	}
 
 	public void setLang(Lang lang) {
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("method", "ZabriPlayer:setLang()");
-		data.put("player", Bukkit.getPlayer(uuid).getName());
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("method", "Plugin:setPlayerLang()");
+		data.put("name", Bukkit.getPlayer(uuid).getName());
 		data.put("lang", lang.toString());
 		CraftSearch.getInstance().query(data);
 	}
 
 	public Grade getGrade() {
 		Grade g = Grade.PLAYER;
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("method", "ZabriPlayer:getGrade()");
-		data.put("player", Bukkit.getPlayer(uuid).getName());
-		HashMap<String, String> response = CraftSearch.getInstance().query(data);
-		if (response.containsKey("success") && response.get("success").equals("true")
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("method", "Public:getPlayerDetails()");
+		data.put("name", Bukkit.getPlayer(uuid).getName());
+		Map<String, Object> response = CraftSearch.getInstance().query(data);
+		if (response.containsKey("success") && (boolean) response.get("success")
 				&& response.containsKey("grade")) {
-			g = Grade.get(response.get("grade"));
+			g = Grade.get((String) response.get("grade"));
 		}
 		return g;
 	}
 
 	public String getCurrentServer() {
 		String current_server = "";
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("method", "ZabriPlayer:getCurrentServer()");
-		data.put("player", Bukkit.getPlayer(uuid).getName());
-		HashMap<String, String> response = CraftSearch.getInstance().query(data);
-		if (response.containsKey("success") && response.get("success").equals("true")
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("method", "Public:getPlayerDetails()");
+		data.put("name", Bukkit.getPlayer(uuid).getName());
+		Map<String, Object> response = CraftSearch.getInstance().query(data);
+		if (response.containsKey("success") && (boolean) response.get("success")
 				&& response.containsKey("current_server")) {
-			current_server = response.get("current_server");
+			current_server = (String) response.get("current_server");
 		}
 		return current_server;
 	}
 
 	public boolean isBanned() {
 		boolean banned = false;
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("method", "ZabriPlayer:isBanned()");
-		data.put("player_name", Bukkit.getPlayer(uuid).getName());
-		data.put("player_uuid", uuid.toString());
-		HashMap<String, String> response = CraftSearch.getInstance().query(data);
-		if (response.containsKey("success") && response.get("success").equals("true")
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("method", "Plugin:isPlayerBanned()");
+		data.put("name", Bukkit.getPlayer(uuid).getName());
+		data.put("uuid", uuid.toString());
+		Map<String, Object> response = CraftSearch.getInstance().query(data);
+		if (response.containsKey("success") && (boolean) response.get("success")
 				&& response.containsKey("banned")) {
-			banned = response.get("banned").equals("true");
+			banned = (boolean) response.get("banned");
 		}
 		return banned;
 	}
 
 	public boolean addSanction(Sanction type, String reason, long expiration) {
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("method", "ZabriPlayer:addSanction()");
-		data.put("player_name", Bukkit.getPlayer(uuid).getName());
-		data.put("player_uuid", uuid.toString());
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("method", "Plugin:addPlayerSanction()");
+		data.put("name", Bukkit.getPlayer(uuid).getName());
+		data.put("uuid", uuid.toString());
 		data.put("type", type.toString());
 		data.put("reason", reason);
-		data.put("expiration", expiration + "");
-		HashMap<String, String> response = CraftSearch.getInstance().query(data);
-		if (response.containsKey("success") && response.get("success").equals("true")) {
+		data.put("expiration", expiration);
+		Map<String, Object> response = CraftSearch.getInstance().query(data);
+		if (response.containsKey("success") && (boolean) response.get("success")) {
 			if (type.equals(Sanction.BAN)) {
 				Bukkit.getPlayer(uuid).kickPlayer("You were banned: " + reason);
 			}
@@ -121,13 +122,13 @@ public class ZabriPlayer {
 	}
 	
 	public boolean removeSanction(Sanction type) {
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("method", "ZabriPlayer:removeSanction()");
-		data.put("player_name", Bukkit.getPlayer(uuid).getName());
-		data.put("player_uuid", uuid.toString());
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("method", "Plugin:removePlayerSanction()");
+		data.put("name", Bukkit.getPlayer(uuid).getName());
+		data.put("uuid", uuid.toString());
 		data.put("type", type.toString());
-		HashMap<String, String> response = CraftSearch.getInstance().query(data);
-		return (response.containsKey("success") && response.get("success").equals("true"));
+		Map<String, Object> response = CraftSearch.getInstance().query(data);
+		return (response.containsKey("success") && (boolean) response.get("success"));
 	}
 
 	public void connectSwitcher(String serverid) {
