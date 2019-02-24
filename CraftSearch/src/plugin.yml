@@ -15,7 +15,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 name: CraftSearch
-version: 5.0_BETA2
+version: 5.0
 author: ZabriCraft
 website: https://www.craftsearch.net/
 main: fr.zabricraft.craftsearch.CraftSearch
