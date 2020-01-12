@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2019 Groupe MINASTE
+ *  Copyright (C) 2020 Groupe MINASTE
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.SkullType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -32,25 +31,23 @@ import org.bukkit.inventory.meta.SkullMeta;
 public class Items {
 
 	public static ItemStack createItem(Material m, int data) {
-		ItemStack i = new ItemStack(m, 1, (byte) data);
+		ItemStack i = new ItemStack(m, 1);
 		return i;
 	}
 
 	public static ItemStack getItem(String s, int q) {
 		Material m;
-		byte imi = 0;
 		boolean hasm = false;
 		try {
-			m = Material.getMaterial(Integer.parseInt(s));
+			m = Material.getMaterial(s);
 		} catch (NumberFormatException e) {
 			if (s.matches("[0-9]+:[0-9]+") || s.matches("[A-Za-z_-]+:[0-9]+")) {
 				String[] s2 = s.split(":");
 				try {
-					m = Material.getMaterial(Integer.parseInt(s2[0]));
+					m = Material.getMaterial(s2[0]);
 				} catch (NumberFormatException e2) {
 					m = Material.getMaterial(s2[0].toUpperCase());
 				}
-				imi = Byte.parseByte(s2[1]);
 				hasm = true;
 			} else {
 				m = Material.getMaterial(s.toUpperCase());
@@ -58,7 +55,7 @@ public class Items {
 		}
 		ItemStack i = new ItemStack(m, q);
 		if (hasm) {
-			i = new ItemStack(m, q, imi);
+			i = new ItemStack(m, q);
 		}
 		return i;
 	}
@@ -81,8 +78,9 @@ public class Items {
 		return i;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static ItemStack getHead(String player){
-		ItemStack i = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
+		ItemStack i = new ItemStack(Material.PLAYER_HEAD, 1);
 		SkullMeta im = (SkullMeta) i.getItemMeta();
 		im.setOwner(player);
 		i.setItemMeta(im);
