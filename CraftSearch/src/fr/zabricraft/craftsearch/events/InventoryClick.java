@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2019 Groupe MINASTE
+ *  Copyright (C) 2020 Groupe MINASTE
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public class InventoryClick implements Listener {
 			Player p = (Player) e.getWhoClicked();
 			ZabriPlayer zp = CraftSearch.getInstance().getPlayer(p.getUniqueId());
 			if (zp != null) {
-				if (e.getInventory().getName().startsWith(Translater.get("inventory_search_title", zp.getLang()))) {
+				if (e.getView().getTitle().startsWith(Translater.get("inventory_search_title", zp.getLang()))) {
 					e.setCancelled(true);
 					if (e.getSlot() == 29 && e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta()
 							&& e.getCurrentItem().getItemMeta().hasLore()) {

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2019 Groupe MINASTE
+ *  Copyright (C) 2020 Groupe MINASTE
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,30 +47,31 @@ public class InventoryManager {
 			int j = 0;
 			for (Object o : servers.values()) {
 				if (o instanceof Map) {
+					@SuppressWarnings("unchecked")
 					Map<String, Object> map = (Map<String, Object>) o;
 					if (j < 27) {
 						ItemStack si = makeServItem(map, l, false);
 						if (si != null) {
 							i.addItem(si);
 						} else {
-							i.addItem(Items.setName(new ItemStack(Material.WOOL), "§cError with this server !"));
+							i.addItem(Items.setName(new ItemStack(Material.WHITE_WOOL), "§cError with this server !"));
 						}
 					}
 					j++;
 				}
 			}
 			i.setItem(31,
-					Items.setName(new ItemStack(Material.WOOL), "§a" + Translater.get("inventory_slot_close", l)));
+					Items.setName(new ItemStack(Material.WHITE_WOOL), "§a" + Translater.get("inventory_slot_close", l)));
 			if (page > 0) {
 				i.setItem(29,
 						Items.setLore(
-								Items.setName(new ItemStack(Material.WOOL),
+								Items.setName(new ItemStack(Material.WHITE_WOOL),
 										"§e" + Translater.get("inventory_slot_previous", l)),
 								"§a" + Translater.get("inventory_slot_page_id", l) + page, "§9Search: " + search));
 			}
 			if (j > 27) {
 				i.setItem(33, Items.setLore(
-						Items.setName(new ItemStack(Material.WOOL), "§e" + Translater.get("inventory_slot_next", l)),
+						Items.setName(new ItemStack(Material.WHITE_WOOL), "§e" + Translater.get("inventory_slot_next", l)),
 						"§a" + Translater.get("inventory_slot_page_id", l) + (page + 2), "§9Search: " + search));
 			}
 			player.openInventory(i);
@@ -91,7 +92,7 @@ public class InventoryManager {
 					color = 5;
 				}
 			}
-			ItemStack result = Items.setName(Items.createItem(Material.WOOL, color), "§6" + server.get("name"));
+			ItemStack result = Items.setName(Items.createItem(Material.WHITE_WOOL, color), "§6" + server.get("name"));
 			ArrayList<String> lore = new ArrayList<String>();
 			String current = "";
 			for (char c : ((String) server.get("description")).toCharArray()) {
